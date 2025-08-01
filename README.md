@@ -31,44 +31,79 @@ This web application simplifies complex text content based on the user’s profi
 - Flask and other dependencies listed in `requirements.txt`
 
 ### Installation
-Run the following commands in command prompt/terminal
 
-1. Clone the repository: 
-  -> git clone https://github.com/Srthhkm/Content-Simplifier.git
+Run the following commands in command prompt/terminal:
 
-2. Navigate into the project directory:
-  -> cd Content-Simplifier
+1. Clone the repository:  
+   git clone https://github.com/Srthhkm/Content-Simplifier.git
 
-3. Create and activate a virtual environment (optional but recommended):
-  -> python -m venv venv
-  -> source venv/bin/activate      # Linux/Mac
-  -> venv\Scripts\activate         # Windows
+2. Navigate into the project directory:  
+   cd Content-Simplifier
 
-4. Install dependencies:
-  -> pip install -r requirements.txt
+3. Create and activate a virtual environment (optional but recommended):  
+   python -m venv venv  
+   # Linux/Mac  
+   source venv/bin/activate  
+   # Windows  
+   venv\Scripts\activate
 
-5. Run the Flask app:
-  -> python app.py
+4. Install dependencies:  
+   pip install -r requirements.txt
 
-6. Open your browser and go to http://127.0.0.1:5000/
+5. Configure your environment variables (see **Configuration** section below).
 
-### Usage 
-- Select a proficiency level.
-- Upload a PDF or DOCX file or enter the text directly.
-- Click Generate to get simplified content.
+6. Run the Flask app:  
+   python app.py
+
+7. Open your browser and go to:  
+   http://127.0.0.1:5000/
+
+### Configuration
+
+To run the backend properly, you need to provide your AI API credentials and endpoint.
+
+- Create a `.env` file in the project root (same folder as `app.py`).  
+- Add the following lines to `.env`:
+
+  API_KEY=your_api_key_here  
+  API_ENDPOINT=https://api.youraiendpoint.com/v1/generate
+
+- Replace `your_api_key_here` and `API_ENDPOINT` with your actual API key and endpoint URL.
+
+**Note:** Do **not** commit your `.env` file to GitHub or share your API keys publicly.
+
+### Usage
+
+- Select a proficiency level.  
+- Upload a PDF or DOCX file **or** enter the text directly.  
+- Click **Generate** to get simplified content.  
 - View the simplified output below the form.
 
 ### Project Structure
-- app.py – Flask backend server
-- templates/index.html – Frontend HTML page
-- static/ – CSS, images, and other static files
-- requirements.txt – Python dependencies
-- test.py – Optional test script (if any)
+
+- app.py – Flask backend server  
+- templates/index.html – Frontend HTML page  
+- static/ – CSS, images, and other static files  
+- requirements.txt – Python dependencies  
+- test.py – Optional test script (if any)  
+- .gitignore – Specifies files/folders to exclude from Git
+
+### .gitignore
+
+This project includes a `.gitignore` file to avoid committing unnecessary or sensitive files such as:
+
+- Virtual environment folders (`venv/`)  
+- Python cache files (`__pycache__/`)  
+- Environment variable files (`.env`)  
+- IDE/editor configs (like `.vscode/`, `.idea/`)
+
+This keeps your repository clean and secure.
 
 ### License
+
 This project is licensed under the MIT License.
 
- " Thank you for using the Content Simplification Agent!
-Feel free to contribute or raise issues in the repository. "
+---
 
-
+Thank you for using the Content Simplification Agent!  
+Feel free to contribute or raise issues in the repository.
