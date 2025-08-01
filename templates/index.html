@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Content Simplifier</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      color: #333;
+      background: linear-gradient(135deg, rgba(224,247,250,0.6), rgba(255,255,255,0.6)), url('/static/background.jpg');
+      background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;
+    }
+    .top-banner {
+      width: 100%; background: linear-gradient(135deg, #00acc1, #007c91);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15); padding: 18px 0 30px;
+      position: sticky; top: 0; z-index: 1000; text-align: center; color: white;
+    }
+    .top-banner h1 { margin-bottom: 6px; font-size: 2.2rem; font-weight: 700; }
+    .top-banner p { max-width: 700px; margin: auto; font-size: 1.1rem; font-style: italic; opacity: 0.85; }
+    .page-wrapper { max-width: 700px; margin: 40px auto 80px; padding: 20px; }
+    .card { background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 12px 24px rgba(0,0,0,0.1); }
+    h1 { text-align: center; font-weight: 600; margin-bottom: 30px; color: #2c3e50; font-size: 1.3rem; }
+    .input-group { margin-bottom: 20px; }
+    label { display: block; margin-bottom: 8px; font-weight: 500; color: #555; }
+    select, textarea, input[type='file'] {
+      width: 100%; padding: 12px 14px; border: 1px solid #ccc; border-radius: 8px; font-size: 0.9rem;
+    }
+    select:focus, textarea:focus { border-color: #00acc1; outline: none; }
+    button {
+      width: 100%; padding: 12px; background: linear-gradient(135deg, #00acc1, #007c91); color: white;
+      border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer;
+    }
+    button:hover { background: linear-gradient(135deg, #0097a7, #006978); transform: translateY(-2px); }
+    .output-box {
+      margin-top: 30px; background: #f1f8f9; padding: 20px; border-radius: 10px; border-left: 5px solid #00acc1;
+      white-space: pre-wrap; color: #007c91;
+    }
+    .hidden { display: none; }
+    .file-info { margin-top: 8px; font-size: 0.9rem; color: #007c91; }
+    .error-message { margin-top: 10px; color: #d32f2f; font-weight: 600; }
+
+    /* Loading spinner styles */
+    #loading svg {
+      animation: rotate 1s linear infinite;
+    }
+    @keyframes rotate {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-banner">
+    <h1>Course Content Simplification Agent</h1>
+    <p>Transform complex content into clearly understandable versions.</p>
+  </header>
+
+  <div class="page-wrapper">
+    <div class="card">
+      <h1>Generate Simplified Content</h1>
+      <form id="contentForm">
+        <div class="input-group">
+          <label for="level">Select level of proficiency</label>
+          <select id="level" name="level" required>
+            <option value="">Select level</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="expert">Expert</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label for="file">Upload File (PDF or DOCX)</label>
+          <input type="file" id="file" name="file" accept=".pdf,.docx" />
+          <div class="file-info" id="fileInfo">No file selected</div>
+        </div>
+
+        <div class="input-group">
+          <label for="content">Or Enter Text</label>
+          <textarea id="content" name="content" rows="6" placeholder="Type your content here..."></textarea>
+        </div>
+
+        <button type="submit">Generate</button>
+      </form>
+
+      <div id="loading" class="hidden" style="text-align:center; margin-top: 20px;">
+        <svg width="40" height="40" viewBox="0 0 50 50">
+          <circle cx="25" cy="25" r="20" stroke="#00acc1" stroke-width="5" fill="none" stroke-linecap="round">
+            <animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" from="0 25 25" to="360 25 25" />
+          </circle>
+        </svg>
+        <div style="color: #00acc1; margin-top: 8px;">Loading...</div>
+      </div>
+
+      <div id="errorMsg" class="error-message hidden"></div>
+
+      <div id="output" class="output-box hidden">
+        <h2>Generated Content</h2>
+        <p id="generatedText"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('file');
+    const fileInfo = document.getElementById('fileInfo');
+    const form = document.getElementById('contentForm');
+    const outputBox = document.getElementById('output');
+    const generatedText = document.getElementById('generatedText');
+    const errorMsg = document.getElementById('errorMsg');
+    const loading = document.getElementById('loading');
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files[0];
+      errorMsg.classList.add('hidden');
+      if (file) {
+        if (file.size > MAX_FILE_SIZE) {
+          errorMsg.textContent = `Error: File size exceeds 5 MB.`;
+          errorMsg.classList.remove('hidden');
+          fileInput.value = "";
+          fileInfo.textContent = "No file selected";
+          return;
+        }
+        fileInfo.textContent = `Selected: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+      } else {
+        fileInfo.textContent = 'No file selected';
+      }
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorMsg.classList.add('hidden');
+      outputBox.classList.add('hidden');
+      generatedText.textContent = '';
+      loading.classList.remove('hidden');  // Show loading spinner
+
+      const level = document.getElementById('level').value;
+      const content = document.getElementById('content').value.trim();
+      const file = fileInput.files[0];
+
+      if (!level) {
+        loading.classList.add('hidden');
+        errorMsg.textContent = 'Please select a proficiency level.';
+        errorMsg.classList.remove('hidden');
+        return;
+      }
+      if (!file && !content) {
+        loading.classList.add('hidden');
+        errorMsg.textContent = 'Please provide either a file or some text.';
+        errorMsg.classList.remove('hidden');
+        return;
+      }
+      if (file && file.size > MAX_FILE_SIZE) {
+        loading.classList.add('hidden');
+        errorMsg.textContent = 'Error: File size exceeds 5 MB.';
+        errorMsg.classList.remove('hidden');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('level', level);
+      formData.append('content', content);
+      if (file) formData.append('file', file);
+
+      try {
+        const response = await fetch('/simplify', {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await response.json();
+        loading.classList.add('hidden');  // Hide loading spinner
+
+        if (!response.ok) {
+          errorMsg.textContent = data.error || 'Server error occurred.';
+          errorMsg.classList.remove('hidden');
+          return;
+        }
+        generatedText.textContent = data.result || 'No result received.';
+        outputBox.classList.remove('hidden');
+      } catch {
+        loading.classList.add('hidden');
+        errorMsg.textContent = 'Failed to connect to the server.';
+        errorMsg.classList.remove('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
