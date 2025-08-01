@@ -1,3 +1,6 @@
+# NOTE: For security, do NOT hardcode real credentials in public repos.
+# Replace 'API_KEY' and 'DEPLOYMENT_URL' with your own if testing locally.
+
 from flask import Flask, request, render_template, jsonify
 from flask_cors import CORS
 import os
@@ -14,8 +17,11 @@ app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 5 MB
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
-API_KEY = "B2FQJqY5c37002LlLVnhnf-JNLf-7lVImgNYhtPdeLcI"
-DEPLOYMENT_URL = "https://au-syd.ml.cloud.ibm.com/ml/v4/deployments/58068a97-5949-419a-808b-b4319cf53503/ai_service?version=2021-05-01"
+# Replace with your IBM Cloud API Key
+API_KEY = "YOUR_IBM_CLOUD_API_KEY_HERE"
+
+# Replace with your Watson Deployment URL
+DEPLOYMENT_URL = "YOUR_DEPLOYMENT_URL_HERE"
 
 cached_token = None
 token_expiry = 0
