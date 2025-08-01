@@ -20,7 +20,8 @@ This web application simplifies complex text content based on the user’s profi
 
 - Frontend: HTML, CSS, JavaScript
 - Backend: Python Flask
-- AI Model: Custom agent for content simplification (via API)
+- Agent creation - IBM Cloud Lite services
+- AI Model: MISTRAL LARGE - Custom agent for content simplification (via API)
 - File Handling: Supports PDF and DOCX uploads
 
 ## Getting Started
