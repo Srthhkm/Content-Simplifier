@@ -1,3 +1,5 @@
+# Demo Script for IBM Cloud Text Generation API
+
 import requests
 
 API_KEY = "tZGZ2aSCF8XyoSUF6qSY3Qz-eDm7ySNkfntHadGzUx_g"
