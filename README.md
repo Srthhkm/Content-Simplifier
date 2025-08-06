@@ -74,7 +74,7 @@ To run the backend properly, you need to provide your AI API credentials and end
 **Note:** Do **not** commit your `.env` file to GitHub or share your API keys publicly.
 
 ### AI Agent Deployment via Jupyter Notebook
-This repository includes a Jupyter Notebook (agent_deployment.ipynb) that allows you to deploy your own AI agent using IBM Cloud services.
+This repository includes a Jupyter Notebook (Content_Simplifier Agent.ipynb) that allows you to deploy your own AI agent using IBM Cloud services.
 
 - Steps to Deploy the Agent:
 Open agent_deployment.ipynb in IBM Watson Studio or any Jupyter environment.
