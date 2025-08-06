@@ -73,6 +73,21 @@ To run the backend properly, you need to provide your AI API credentials and end
 
 **Note:** Do **not** commit your `.env` file to GitHub or share your API keys publicly.
 
+### AI Agent Deployment via Jupyter Notebook
+This repository includes a Jupyter Notebook (agent_deployment.ipynb) that allows you to deploy your own AI agent using IBM Cloud services.
+
+- Steps to Deploy the Agent:
+Open agent_deployment.ipynb in IBM Watson Studio or any Jupyter environment.
+Follow the instructions inside the notebook to:
+
+- Authenticate with your IBM Cloud API key.
+- Deploy the AI model (e.g., Mistral Large) with the provided prompt instructions.
+- Retrieve your custom API_KEY and API_ENDPOINT.
+- Use these values in your .env file as described above.
+- Once deployed, your Flask app will use your custom AI agent for content simplification.
+
+This allows anyone to replicate or customize the AI agent without relying on an existing deployment.
+
 ### Usage
 
 - Select a proficiency level.  
